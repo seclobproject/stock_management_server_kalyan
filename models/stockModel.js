@@ -5,17 +5,13 @@ const Schema = mongoose.Schema;
 const stockSchema = new Schema(
   {
     product: {
-      productName: {
-        type: String,
-        ref: "Product",
-      },
       productId: {
         type: String,
         ref: "Product",
-      },
-      quantity: {
-        type: Number,
         required: true,
+      },
+      productName: {
+        type: String,
       },
     },
     franchise: {
@@ -27,8 +23,14 @@ const stockSchema = new Schema(
         type: String,
       },
     },
-    partyName: {
+    quantity: {
+      type: Number,
+      required: true,
+    },
+    type: {
       type: String,
+      enum: ["add", "remove"],
+      required: true,
     },
   },
   {

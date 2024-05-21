@@ -1,5 +1,5 @@
 
-import { addStock, getAllStock } from "../services/stock.service.js";
+import { addStock, getAllStock, updateStock } from "../services/stock.service.js";
 
 // add stock
 
