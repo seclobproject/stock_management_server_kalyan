@@ -28,7 +28,7 @@ export async function updateCategory(req, res, next) {
      const categoryData = req.body;
      const categoryId = req.params.id;
     const result = await updCategory(categoryData,categoryId);
-    res.status(200).send(result);
+    res.status(200).send({result,  message: "Category updated successfully" });
   } catch (err) {
     next(err);
   }
@@ -39,7 +39,7 @@ export async function deleteCategory(req, res, next) {
   try {
      const categoryId = req.params.id;
     const result = await dltCategory(categoryId);
-    res.status(200).send(result);
+    res.status(200).send({result, message:"Delete category successfully"});
   } catch (err) {
     next(err);
   }

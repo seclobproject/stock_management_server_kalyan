@@ -1,6 +1,6 @@
 export function productValidator(req, res, next) {
   if (req.body) {
-    let { name, price, productCode,quantity, category, franchise } = req.body;
+    let { name, price, productCode, category, franchise } = req.body;
 
     if (!name) {
       res.send({ message: "product name is required" });

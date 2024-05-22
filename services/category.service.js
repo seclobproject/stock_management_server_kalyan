@@ -7,6 +7,10 @@ import { HttpException } from "../exceptions/exceptions.js";
 
 // add new category
 export async function saveCategory(data) {
+  const findCategory = await categoryModel.findOne({
+    categoryName: data.categoryName,
+  });
+  if(findCategory) throw new HttpException(400, "category already exist");
   const category = await categoryModel.create({ ...data });
   return { category };
 }
@@ -36,6 +40,7 @@ export async function updCategory(categoryData, categoryId) {
 
   return { category };
 }
+
 // delete category
 
 export async function dltCategory(categoryId) {
@@ -52,7 +57,7 @@ export async function dltCategory(categoryId) {
 
 export async function findcategoryData(categoryId) {
   const category = await categoryModel.findOne({ _id: categoryId });
-  if (!category) throw new HttpException(404, "subcategory not found");
+  if (!category) throw new HttpException(404, "category not found");
 
   return category;
 }

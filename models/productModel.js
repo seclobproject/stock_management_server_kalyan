@@ -19,9 +19,10 @@ const productSchema = new Schema(
       required: true,
       dafault: 0,
     },
-    quantity:{
-      type:Number,
-      required:true
+    quantity: {
+      type: Number,
+      required: true,
+      dafault: 0,
     },
     category: {
       categoryId: {

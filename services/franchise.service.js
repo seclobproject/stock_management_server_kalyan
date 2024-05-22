@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
 import { HttpException } from "../exceptions/exceptions.js";
 import franchiseModel from '../models/franchiseModel.js'
-// import lodash from "lodash";
-// const { toNumber } = lodash;
 
 // add new category
 export async function saveFranchise(data) {
+    const findFranchise = await franchiseModel.findOne({
+      franchiseName: data.franchiseName,
+    });
+    if (findFranchise) throw new HttpException(400, "franchise already exist");
   const franchise = await franchiseModel.create({ ...data });
   return { franchise };
 }

@@ -40,7 +40,7 @@ export async function saveProduct(productData) {
 
 //---------------------------
 
-// update product
+//--------- update product --------
 
 export async function productUpdate(productId, productData) {
   if (productData.subcategory) {
@@ -63,6 +63,7 @@ export async function productUpdate(productId, productData) {
   if (!product) throw new HttpException(404, "product not found");
   return { product };
 }
+// ----------------------------
 
 // get all products
 
@@ -96,6 +97,9 @@ export async function getAll(page, limit, query) {
   return { products, total };
 }
 
+
+// ------- get filtered product by category
+
 export async function findAllProductByCategory(page, limit, categories) {
   const queryData = {
     "subcategory.subcategoryId": { $in: categories }, // Using $in operator to match multiple subcategory IDs
@@ -110,7 +114,7 @@ export async function findAllProductByCategory(page, limit, categories) {
   return { products, total };
 }
 
-// find single product
+//-------- find single product -----------
 
 export async function findSingleProduct(productId) {
   const product = await productModel.findById(productId);
@@ -118,7 +122,7 @@ export async function findSingleProduct(productId) {
   return { product };
 }
 
-// delete a product
+//-------- delete a product -----------
 
 export async function deleteProduct(productId) {
   if (!mongoose.Types.ObjectId.isValid(productId)) {
