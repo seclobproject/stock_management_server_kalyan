@@ -11,6 +11,7 @@ import categoryRouter from './routes/categoryRoute.js'
 import franchiseRouter from './routes/franchiseRoute.js'
 import productRouter from './routes/productRoute.js'
 import stockRouter from './routes/stockRoute.js'
+import dashboardRouter from "./routes/dashboardDataRoute.js";
 
 // dotenv.config();
 
@@ -34,7 +35,8 @@ app.use(
   categoryRouter,
   franchiseRouter,
   productRouter,
-  stockRouter
+  stockRouter,
+  dashboardRouter,
 );
 
 app.use(errorHandling);

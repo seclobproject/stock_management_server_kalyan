@@ -13,7 +13,8 @@ export async function addStock(data) {
 
   const franchise = data.franchise;
   const quantity = data.quantity;
-  const totalQuantity = (product.quantity += quantity);
+  const totalQuantity = product.quantity += quantity;
+
   product.totalPrice = product.price * totalQuantity;
   if (!product.stock) {
     product.stock = [];
@@ -100,7 +101,11 @@ export async function updateStock(data) {
 // get all stock transactions
 
 export async function getAllStock(page, limit, query) {
-  const stock = await stockModel.find();
+  const stock = await stockModel
+    .find()
+    .skip((toNumber(page) - 1) * toNumber(limit))
+    .limit(toNumber(limit))
+    .sort({ createdAt: -1 });;
   const total = await stockModel.find().countDocuments();
   return { stock, total };
 }

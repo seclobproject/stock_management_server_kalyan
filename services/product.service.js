@@ -24,15 +24,16 @@ export async function saveProduct(productData) {
     categoryName: categoryData.categoryName,
   };
 
-  const franchiseData = await findFranchise(productData.franchise);
-  const franchise = {
-    franchiseId: franchiseData._id,
-    franchiseName: franchiseData.franchiseName,
-  };
+  // const franchiseData = await findFranchise(productData.franchise);
+  // const franchise = {
+  //   franchiseId: franchiseData._id,
+  //   franchiseName: franchiseData.franchiseName,
+  // };
   const product = await productModel.create({
     ...productData,
     category,
-    franchise,
+    // franchise,
+    quantity:0,
     stock: [],
   });
   return { product };
@@ -71,9 +72,9 @@ export async function getAll(page, limit, query) {
   let queryData = {};
   if (query?.search) {
     queryData["$or"] = [
-      { title: { $regex: query?.search ? query?.search : "", $options: "i" } },
+      { name: { $regex: query?.search ? query?.search : "", $options: "i" } },
       {
-        "subcategory.subcategoryName": {
+        productCode: {
           $regex: query?.search ? query?.search : "",
           $options: "i",
         },
@@ -88,7 +89,7 @@ export async function getAll(page, limit, query) {
   }
 
   const products = await productModel
-    .find(queryData)
+    .find(queryData).populate("stock.storeId")
     .skip((toNumber(page) - 1) * toNumber(limit))
     .limit(toNumber(limit))
     .sort({ createdAt: -1 });

@@ -6,7 +6,7 @@ export async function addCategory(req, res, next) {
   try {
     const categoryData = req.body;
     const result = await saveCategory(categoryData);
-    res.status(200).send({ message: "Category added successfully" });
+    res.status(200).send({ message: "Category added successfully" , result});
   } catch (err) {
     next(err);
   }

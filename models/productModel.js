@@ -21,7 +21,6 @@ const productSchema = new Schema(
     },
     quantity: {
       type: Number,
-      required: true,
       dafault: 0,
     },
     category: {
@@ -33,20 +32,20 @@ const productSchema = new Schema(
         type: String,
       },
     },
-    franchise: {
-      franchiseId: {
-        type: String,
-        ref: "Category",
-      },
-      franchiseName: {
-        type: String,
-      },
-    },
+    // franchise: {
+    //   franchiseId: {
+    //     type: String,
+    //     ref: "Category",
+    //   },
+    //   franchiseName: {
+    //     type: String,
+    //   },
+    // },
     stock: [
       {
         storeId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Store",
+          ref: "Franchise",
         },
         quantity: Number,
       },

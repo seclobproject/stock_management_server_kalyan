@@ -10,7 +10,7 @@ export async function saveCategory(data) {
   const findCategory = await categoryModel.findOne({
     categoryName: data.categoryName,
   });
-  if(findCategory) throw new HttpException(400, "category already exist");
+  if(findCategory) throw new HttpException(400, "Category already exist");
   const category = await categoryModel.create({ ...data });
   return { category };
 }
