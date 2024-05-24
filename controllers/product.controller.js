@@ -13,7 +13,7 @@ export async function createProduct(req, res, next) {
   try {
     const productData = req.body;
     const product = await saveProduct(productData);
-    res.status(200).send(product);
+    res.status(200).send({ message: "Product added successfully" ,product});
   } catch (err) {
     next(err);
   }
@@ -28,7 +28,7 @@ export async function updateProduct(req, res, next) {
     // const files = req.files;
     const product = await productUpdate(productId, productData);
 
-    res.status(200).send(product);
+    res.status(200).send({ message: "Product updated successfully" ,product});
   } catch (err) {
     next(err);
   }
@@ -83,7 +83,7 @@ export async function removeProduct(req, res, next) {
   try {
     const productId = req.params.id;
     const result = await deleteProduct(productId);
-    res.status(200).send(result);
+    res.status(200).send({ message: "Product Removed successfully", result });
   } catch (err) {
     next(err);
   }
