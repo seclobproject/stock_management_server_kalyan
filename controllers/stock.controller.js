@@ -9,6 +9,7 @@ export async function stockIn(req, res, next) {
     const stock = await addStock(stockData);
     res.status(200).send(stock);
   } catch (err) {
+    console.log(err)
     next(err);
   }
 }

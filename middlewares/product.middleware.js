@@ -3,15 +3,15 @@ export function productValidator(req, res, next) {
     let { name, price, productCode, category } = req.body;
 
     if (!name) {
-      res.send({ message: "product name is required" });
+      res.status(400).send({ message: "product name is required" });
       return;
     }
     if (!productCode) {
-      res.send({ message: "product code is required" });
+      res.status(400).send({ message: "product code is required" });
       return;
     }
     if (!category) {
-      res.send({ message: "category is required" });
+      res.status(400).send({ message: "category is required" });
       return;
     }
     // if (!franchise) {
@@ -24,7 +24,7 @@ export function productValidator(req, res, next) {
     // }
 
     if (!price) {
-      res.send({ message: "price is required" });
+      res.status(400).send({ message: "price is required" });
       return;
     }
   }

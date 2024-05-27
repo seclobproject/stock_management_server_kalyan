@@ -9,7 +9,28 @@ const franchiseSchema = new Schema(
       required: true,
       unique: true,
     },
+    stock: [
+      {
+        product: {
+          productId: {
+            type: String,
+            ref: "Product",
+          },
+          productName: {
+            type: String,
+          },
+          productCode: {
+            type: String,
+          },
+          quantity: {
+            type: Number,
+          },
+        },
+        
+      },
+    ],
   },
+
   {
     timestamps: true,
   }

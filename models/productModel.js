@@ -47,7 +47,9 @@ const productSchema = new Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "Franchise",
         },
-        quantity: Number,
+        quantity: {
+          type: Number,
+        },
       },
     ],
     totalPrice: {

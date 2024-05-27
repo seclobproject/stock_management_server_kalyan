@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-// mongoose.set("strictQuery", false);
+import "dotenv/config";
 
 const connection_string = process.env.MONGODB_URL;
 
 export async function initialize() {
   try {
-    await mongoose.connect(process.env.MONGODB_URL);
+    await mongoose.connect(connection_string);
 
     console.log("mongodb connected");
   } catch (err) {

@@ -1,17 +1,17 @@
-import { dltFranchise, getAllFranchise, saveFranchise, updFranchise } from "../services/franchise.service.js";
+import { dltFranchise, findFranchise, getAllFranchise, saveFranchise, updFranchise } from "../services/franchise.service.js";
 
-// add new category
+// add new franchise
 export async function addFranchise(req, res, next) {
   try {
-    const categoryData = req.body;
-    const result = await saveFranchise(categoryData);
+    const franchiseData = req.body;
+    const result = await saveFranchise(franchiseData);
     res.status(200).send({ message: "Successfully added Franchise" });
   } catch (err) {
     next(err);
   
 }
 }
-// get all category
+// get all franchise
 export async function getAll(req, res, next) {
   try {
     const result = await getAllFranchise();
@@ -20,6 +20,20 @@ export async function getAll(req, res, next) {
     next(err);
   }
 }
+
+// get single franchise
+
+
+export async function getSingleFranchise(req, res, next) {
+  try {
+    const franchiseId = req.params.id;
+    const result = await findFranchise(franchiseId);
+    res.status(200).send(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
 
 // update a franchise
 export async function updateFranchise(req, res, next) {

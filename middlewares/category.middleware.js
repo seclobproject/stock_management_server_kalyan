@@ -3,7 +3,9 @@ export function categoryValidator(req, res, next) {
     let { categoryName } = req.body;
 
     if (!categoryName) {
-      res.status(400).send({ message: "category name is required" });
+      res
+        .status(400)
+        .send({ message: "category name is required" });
       return;
     }
   }

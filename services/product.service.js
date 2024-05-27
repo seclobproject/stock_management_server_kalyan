@@ -12,6 +12,7 @@ export async function saveProduct(productData) {
   const findProduct = await productModel.findOne({ name: productData.name });
   if (findProduct) throw new HttpException(400, "Product already exist ");
 
+  // update the product total prise
   if (!productData.quantity) {
     productData.totalPrice = productData.price;
   } else {
@@ -46,7 +47,7 @@ export async function saveProduct(productData) {
 export async function productUpdate(productId, productData) {
   if (productData.subcategory) {
     const categoryData = await findcategoryData(
-      productData.subcategory.subcategoryId
+      productData.category
     );
     const category = {
       categoryId: categoryData._id,
@@ -65,7 +66,7 @@ export async function productUpdate(productId, productData) {
   return { product };
 }
 // ----------------------------
-
+      
 // get all products
 
 export async function getAll(page, limit, query) {
@@ -89,7 +90,8 @@ export async function getAll(page, limit, query) {
   }
 
   const products = await productModel
-    .find(queryData).populate("stock.storeId")
+    .find(queryData)
+    .populate([{ path: "stock.storeId" }, { path: "category" }])
     .skip((toNumber(page) - 1) * toNumber(limit))
     .limit(toNumber(limit))
     .sort({ createdAt: -1 });
@@ -97,7 +99,6 @@ export async function getAll(page, limit, query) {
   const total = await productModel.find(queryData).countDocuments();
   return { products, total };
 }
-
 
 // ------- get filtered product by category
 

@@ -3,11 +3,11 @@ export function loginValidator(req, res, next) {
   if (req.body) {
     let { email, password } = req.body;
     if (!email) {
-      res.send({ message: "email is required" });
+      res.status(400).send({ message: "email is required" });
       return;
     }
     if (!password) {
-      res.send({ message: "password is required" });
+      res.status(400).send({ message: "password is required" });
       return;
     }
   }

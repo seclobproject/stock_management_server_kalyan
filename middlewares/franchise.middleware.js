@@ -3,7 +3,7 @@ export function franchiseValidator(req, res, next) {
     let { franchiseName } = req.body;
 
     if (!franchiseName) {
-      res.send({ message: "franchise name is required" });
+      res.status(400).send({ message: "franchise name is required" });
       return;
     }
   }

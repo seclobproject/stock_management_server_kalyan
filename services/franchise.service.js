@@ -13,7 +13,7 @@ export async function saveFranchise(data) {
 }
 // get all categories
 export async function getAllFranchise() {
-  const franchise = await franchiseModel.find();
+  const franchise = await franchiseModel.find()
   const total = await franchiseModel.find().countDocuments();
   return { franchise, total };
 }
@@ -54,8 +54,7 @@ export async function dltFranchise(franchiseId) {
 // find single franchise
 
 export async function findFranchise(franchiseId) {
-  const franchise = await franchiseModel.findOne({ _id: franchiseId });
+  const franchise = await franchiseModel.findById(franchiseId);
   if (!franchise) throw new HttpException(404, "franchise not found");
-
   return franchise;
 }
