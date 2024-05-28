@@ -1,6 +1,6 @@
 import {
   deleteProduct,
-  findAllProductByCategory,
+  findAllProductByFranchise,
   findSingleProduct,
   getAll,
   productUpdate,
@@ -50,16 +50,23 @@ export async function getAllProduct(req, res, next) {
 }
 
 // get filtered product by category
-
-export async function getAllProductBycategory(req, res, next) {
+export async function getAllProductByFranchise(req, res, next) {
   try {
-    const categories = req.query.category;
-    const page = req.query.page;
-    const limit = req.query.limit || 10;
-    const result = await findAllProductByCategory(page, limit, categories);
+    const franchiseId = req.query.franchise; 
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 10; 
+
+    if (!franchiseId) {
+      return res
+        .status(400)
+        .send({ error: "Missing required parameter: franchise" });
+    }
+
+    const result = await findAllProductByFranchise(page, limit, franchiseId);
 
     res.status(200).send(result);
   } catch (err) {
+    console.error(err); // Log the error for debugging
     next(err);
   }
 }

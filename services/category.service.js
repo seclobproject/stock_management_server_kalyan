@@ -16,7 +16,7 @@ export async function saveCategory(data) {
 }
 // get all categories
 export async function getAll() {
-  const category = await categoryModel.find();
+  const category = await categoryModel.find().sort({ createdAt: -1 });;
   const total = await categoryModel.find().countDocuments();
   return { category, total };
 }

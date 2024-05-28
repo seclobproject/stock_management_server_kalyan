@@ -44,7 +44,7 @@ const productSchema = new Schema(
     stock: [
       {
         storeId: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: Schema.Types.ObjectId,
           ref: "Franchise",
         },
         quantity: {

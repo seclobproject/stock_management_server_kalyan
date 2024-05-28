@@ -34,6 +34,7 @@ export async function stockOut(req, res, next) {
   try {
     const stockData = req.body;
     const stock = await updateStock(stockData);
+    console.log(stock);
     res.status(200).send(stock);
   } catch (err) {
     next(err);

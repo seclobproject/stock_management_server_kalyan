@@ -6,7 +6,7 @@ const stockSchema = new Schema(
   {
     product: {
       productId: {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "Product",
         required: true,
       },
@@ -16,7 +16,7 @@ const stockSchema = new Schema(
     },
     franchise: {
       franchiseId: {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "Franchise",
       },
       franchiseName: {

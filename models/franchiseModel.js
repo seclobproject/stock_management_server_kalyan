@@ -13,7 +13,7 @@ const franchiseSchema = new Schema(
       {
         product: {
           productId: {
-            type: String,
+            type: Schema.Types.ObjectId,
             ref: "Product",
           },
           productName: {
@@ -26,7 +26,6 @@ const franchiseSchema = new Schema(
             type: Number,
           },
         },
-        
       },
     ],
   },

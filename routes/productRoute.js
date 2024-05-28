@@ -3,8 +3,8 @@ import {
   getSingleProduct,
   createProduct,
   updateProduct,
-  getAllProductBycategory,
   removeProduct,
+  getAllProductByFranchise,
 } from "../controllers/product.controller.js";
 import express from "express";
 // import { upload } from "../utils/multer.util.js";
@@ -15,7 +15,7 @@ const router = express.Router();
 const path = "/product";
 
 router.get(`${path}/all`, getAllProduct);
-router.get(`${path}/category/all`, getAllProductBycategory);
+router.get(`${path}/all_franchise`, getAllProductByFranchise);
 router.post(
   `${path}/create`,authorizeRoles,
   productValidator,

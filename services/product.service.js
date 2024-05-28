@@ -3,6 +3,8 @@ import { HttpException } from "../exceptions/exceptions.js";
 import lodash from "lodash";
 import { findcategoryData } from "./category.service.js";
 import { findFranchise } from "./franchise.service.js";
+import franchiseModel from "../models/franchiseModel.js";
+
 import mongoose from "mongoose";
 const { toNumber } = lodash;
 
@@ -19,21 +21,8 @@ export async function saveProduct(productData) {
     productData.totalPrice = productData.price * productData.quantity;
   }
 
-  const categoryData = await findcategoryData(productData.category);
-  const category = {
-    categoryId: categoryData._id,
-    categoryName: categoryData.categoryName,
-  };
-
-  // const franchiseData = await findFranchise(productData.franchise);
-  // const franchise = {
-  //   franchiseId: franchiseData._id,
-  //   franchiseName: franchiseData.franchiseName,
-  // };
   const product = await productModel.create({
     ...productData,
-    category,
-    // franchise,
     quantity:0,
     stock: [],
   });
@@ -100,20 +89,15 @@ export async function getAll(page, limit, query) {
   return { products, total };
 }
 
-// ------- get filtered product by category
+// ------- get filtered product by franchise
 
-export async function findAllProductByCategory(page, limit, categories) {
-  const queryData = {
-    "subcategory.subcategoryId": { $in: categories }, // Using $in operator to match multiple subcategory IDs
-  };
-  const products = await productModel
-    .find(queryData)
-    .skip((toNumber(page) - 1) * toNumber(limit))
-    .limit(toNumber(limit))
-    .sort({ createdAt: -1 });
-
-  const total = await productModel.find(queryData).countDocuments();
-  return { products, total };
+export async function findAllProductByFranchise(page, limit, franchiseId) {
+  try {
+    const products = await franchiseModel.findById(franchiseId);
+    return { products:products.stock };
+  } catch (error) {
+    throw error;
+  }
 }
 
 //-------- find single product -----------
