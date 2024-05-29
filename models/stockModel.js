@@ -13,6 +13,12 @@ const stockSchema = new Schema(
       productName: {
         type: String,
       },
+      productCode: {
+        type: String,
+      },
+      price:{
+        type:Number
+      }
     },
     franchise: {
       franchiseId: {

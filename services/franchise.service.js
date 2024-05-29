@@ -24,18 +24,28 @@ export async function updFranchise(franchiseData, franchiseId) {
     throw new HttpException(400, "Invalid franchise ID");
   }
 
-  const franch = await franchiseModel.findById(franchiseId);
-  if (!franch) {
-    throw new HttpException(404, "Franchise not found");
-  }
+      if (franchiseData.franchiseName) {
+        const findFranchise = await franchiseModel.findOne({
+          franchiseName: franchiseData.franchiseName,
+        });
+        if (findFranchise && findFranchise._id.toString() !== franchiseId) {
+          throw new HttpException(
+            400,
+            "Franchise with this name already exists"
+          );
+        }
+      }
 
-  const category = await franchiseModel.findByIdAndUpdate(
+  const franchise = await franchiseModel.findByIdAndUpdate(
     franchiseId,
     franchiseData,
     { new: true }
   );
 
-  return { category };
+ if (!franchise) {
+   throw new HttpException(404, "Franchise not found");
+ }
+  return { franchise };
 }
 // delete category
 

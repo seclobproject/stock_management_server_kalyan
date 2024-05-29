@@ -35,7 +35,7 @@ export async function addStock(data) {
     if (!Array.isArray(franchiseData.stock)) {
       franchiseData.stock = [];
     }
-    const stockIndex = product.stock.findIndex(
+    const stockIndex = await product.stock.findIndex(
       (stock) => stock.storeId._id && stock.storeId._id.toString() === data.franchise
     );
     if (stockIndex > -1) {
@@ -52,9 +52,9 @@ export async function addStock(data) {
       productName: product.name,
       productCode: product.productCode,
       quantity: data.quantity,
+      price: product.price,
     };
-
-    const franchiseIndex = franchiseData.stock.findIndex(
+    const franchiseIndex = await franchiseData.stock.findIndex(
       (stock) =>
         stock.product.productId &&
         stock.product.productId.toString() === data.product

@@ -34,29 +34,32 @@ export async function saveProduct(productData) {
 //--------- update product --------
 
 export async function productUpdate(productId, productData) {
-  if (productData.subcategory) {
-    const categoryData = await findcategoryData(
-      productData.category
+  try {
+
+    if (productData.name) {
+      const findProduct = await productModel.findOne({
+        name: productData.name,
+      });
+      if (findProduct && findProduct._id.toString() !== productId) {
+        throw new HttpException(400, "Product with this name already exists");
+      }
+    }
+    const product = await productModel.findByIdAndUpdate(
+      productId,
+      productData,
+      { new: true }
     );
-    const category = {
-      categoryId: categoryData._id,
-      categoryName: categoryData.categoryName,
-    };
-    productData.category = category;
+    if (!product) {
+      throw new HttpException(404, "Product not found");
+    }
+    return { product };
+  } catch (error) {
+    throw error;
   }
-
-  const product = await productModel.findByIdAndUpdate(
-    productId,
-    productData,
-
-    { new: true }
-  );
-  if (!product) throw new HttpException(404, "product not found");
-  return { product };
 }
 // ----------------------------
       
-// get all products
+//----------- get all products -------------
 
 export async function getAll(page, limit, query) {
   let queryData = {};
@@ -88,6 +91,7 @@ export async function getAll(page, limit, query) {
   const total = await productModel.find(queryData).countDocuments();
   return { products, total };
 }
+// ------------------------------------
 
 // ------- get filtered product by franchise
 

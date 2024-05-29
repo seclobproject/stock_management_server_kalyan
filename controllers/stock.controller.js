@@ -7,7 +7,7 @@ export async function stockIn(req, res, next) {
   try {
     const stockData = req.body;
     const stock = await addStock(stockData);
-    res.status(200).send(stock);
+    res.status(200).send({message:"stock added successfully",stock});
   } catch (err) {
     console.log(err)
     next(err);
@@ -35,7 +35,7 @@ export async function stockOut(req, res, next) {
     const stockData = req.body;
     const stock = await updateStock(stockData);
     console.log(stock);
-    res.status(200).send(stock);
+    res.status(200).send({ message: "stock out successfully", stock });
   } catch (err) {
     next(err);
   }

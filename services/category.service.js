@@ -1,47 +1,52 @@
 import mongoose from "mongoose";
 import categoryModel from "../models/categoryModel.js";
 import { HttpException } from "../exceptions/exceptions.js";
-// import lodash from "lodash";
-// const { toNumber } = lodash;
 
-
-// add new category
+//--------- add new category ----------
 export async function saveCategory(data) {
   const findCategory = await categoryModel.findOne({
-    categoryName: data.categoryName,
+      categoryName: { $regex: new RegExp("^" + data.categoryName + "$", "i") }
   });
   if(findCategory) throw new HttpException(400, "Category already exist");
   const category = await categoryModel.create({ ...data });
   return { category };
 }
-// get all categories
+
+//---------- get all categories --------------
 export async function getAll() {
   const category = await categoryModel.find().sort({ createdAt: -1 });;
   const total = await categoryModel.find().countDocuments();
   return { category, total };
 }
 
-// update category
+//--------- update category ---------------
 export async function updCategory(categoryData, categoryId) {
   if (!mongoose.Types.ObjectId.isValid(categoryId)) {
     throw new HttpException(400, "Invalid category ID");
   }
 
-  const catry = await categoryModel.findById(categoryId);
-  if (!catry) {
-    throw new HttpException(404, "Category not found");
-  }
+    if (categoryData.categoryName) {
+      const findCategory = await categoryModel.findOne({
+        categoryName: categoryData.categoryName,
+      });
+      if (findCategory && findCategory._id.toString() !== categoryId) {
+        throw new HttpException(400, "Product with this name already exists");
+      }
+    }
 
   const category = await categoryModel.findByIdAndUpdate(
     categoryId,
     categoryData,
     { new: true }
   );
+  if (!category) {
+    throw new HttpException(404, "Category not found");
+  }
 
   return { category };
 }
 
-// delete category
+//--------- delete category ---------
 
 export async function dltCategory(categoryId) {
   if (!mongoose.Types.ObjectId.isValid(categoryId)) {
@@ -53,7 +58,7 @@ export async function dltCategory(categoryId) {
   return { category };
 }
 
-// find single category
+//--------------- find single category ---------
 
 export async function findcategoryData(categoryId) {
   const category = await categoryModel.findOne({ _id: categoryId });
