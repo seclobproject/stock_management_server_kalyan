@@ -15,7 +15,7 @@ export async function userLogin(loginData) {
     findUser.password
   );
   if (!validpassword)
-    throw new HttpException(404, "password is invalid");
+    throw new HttpException(404, "Invalid password ");
   const token = jwt.sign({ _id: findUser._id }, process.env.TOKEN_KEY);
   return { token };
 }

@@ -87,7 +87,9 @@ export async function addStock(data) {
   }
 }
 
-// out stock
+//-----------------------------
+
+//------- out stock -------------
 
 export async function updateStock(data) {
   const product = await productModel
@@ -95,44 +97,57 @@ export async function updateStock(data) {
     .populate("stock.storeId");
   if (!product) throw new HttpException(404, "product not found");
 
-  // const quantity = data.quantity;
-  const totalQuantity = product.quantity - data.quantity;
-  product.totalPrice = product.price * totalQuantity;
+  const stockIndex = product.stock.findIndex(
+    (stock) =>
+      stock.storeId._id && stock.storeId._id.toString() === data.franchise
+  );
 
   // Find franchise
   const franchiseData = await franchiseModel.findById(data.franchise);
+  if (!franchiseData) throw new HttpException(404, "Franchise not found");
+
+  if (stockIndex > -1) {
+    if (product.stock[stockIndex].quantity < data.quantity) {
+      throw new HttpException(400, "Insufficient stock");
+    }
+    // const quantity = data.quantity;
+    const totalQuantity = product.quantity - data.quantity;
+    product.totalPrice = product.price * totalQuantity;
+
+    product.stock[stockIndex].quantity -= data.quantity;
+    product.quantity -= data.quantity;
+    // franchiseData.stock[franchiseIndex].product.quantity -= data.quantity;
+  } else {
+    throw new HttpException(404, "Stock not found in specified store");
+  }
+
+  const updatedProduct = await product.save();
+
   const franchiseDetails = {
     franchiseId: franchiseData._id,
     franchiseName: franchiseData.franchiseName,
   };
-
-  const stockIndex = product.stock.findIndex(
-    (stock) => stock.storeId && stock.storeId.toString() === data.franchise
-  );
-
   const franchiseIndex = franchiseData.stock.findIndex(
     (stock) =>
       stock.product.productId &&
       stock.product.productId.toString() === data.product
   );
-
-  if (stockIndex > -1) {
-    if (product.stock[stockIndex].quantity < quantity) {
-      throw new HttpException(400, "Insufficient stock");
-    }
-    product.stock[stockIndex].quantity -= quantity;
-    product.quantity -= data.quantity;
+  
+  if (franchiseIndex > -1) {
     franchiseData.stock[franchiseIndex].product.quantity -= data.quantity;
-  } else {
-    throw new HttpException(404, "Stock not found in specified store");
   }
-  const updatedProduct = await product.save();
   const updatedFranchise = await franchiseData.save();
+    const productDetails = {
+      productId: product._id,
+      productName: product.name,
+      productCode: product.productCode,
+      price: product.price,
+    };
 
   const stock = new stockModel({
     product: productDetails,
     franchise: franchiseDetails,
-    quantity,
+    quantity:data.quantity,
     type: "remove",
   });
   await stock.save();
@@ -160,11 +175,12 @@ export async function getAllStock(page, limit, query) {
       },
     ];
   }
+  const totalDocs = await stockModel.find().countDocuments();
+   const totalPages =await Math.ceil(totalDocs / limit);
   const stock = await stockModel
     .find(queryData)
     .skip((toNumber(page) - 1) * toNumber(limit))
     .limit(toNumber(limit))
     .sort({ createdAt: -1 });
-  const total = await stockModel.find().countDocuments();
-  return { stock, total };
+  return { stock, totalPages, totalDocs };
 }

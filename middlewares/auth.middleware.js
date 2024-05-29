@@ -2,9 +2,6 @@ import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
 
 export const authorizeRoles = async (req, res, next) => {
-  console.log('====================================');
-  console.log("jskhdfk");
-  console.log('====================================');
   const token =
     (req.header("Authorization") &&
       req.header("Authorization").split("Bearer ")[1]) ||
