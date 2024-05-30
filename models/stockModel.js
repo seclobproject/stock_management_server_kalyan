@@ -16,9 +16,12 @@ const stockSchema = new Schema(
       productCode: {
         type: String,
       },
-      price:{
-        type:Number
-      }
+      price: {
+        type: Number,
+      },
+      categoryName:{
+        type:String
+      },
     },
     franchise: {
       franchiseId: {
@@ -28,6 +31,9 @@ const stockSchema = new Schema(
       franchiseName: {
         type: String,
       },
+    },
+    totalQuantity: {
+      type: Number,
     },
     quantity: {
       type: Number,

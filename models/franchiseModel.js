@@ -25,6 +25,12 @@ const franchiseSchema = new Schema(
           quantity: {
             type: Number,
           },
+          price:{
+            type:Number
+          },
+          categoryName:{
+            type:String
+          }
         },
       },
     ],

@@ -9,6 +9,12 @@ const categorySchema = new Schema(
       required: true,
       unique: true,
     },
+    products: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
   },
   {
     timestamps: true,

@@ -1,10 +1,7 @@
 import productModel from "../models/productModel.js";
 import { HttpException } from "../exceptions/exceptions.js";
 import stockModel from "../models/stockModel.js";
-import { findSingleProduct } from "./product.service.js";
-import { findFranchise } from "./franchise.service.js";
 import franchiseModel from "../models/franchiseModel.js";
-
 import lodash from "lodash";
 const { toNumber } = lodash;
 
@@ -51,6 +48,7 @@ export async function addStock(data) {
       productId: product._id,
       productName: product.name,
       productCode: product.productCode,
+      categoryName: product.category.categoryName,
       quantity: data.quantity,
       price: product.price,
     };
@@ -75,6 +73,7 @@ export async function addStock(data) {
         franchiseId: franchiseData._id,
         franchiseName: franchiseData.franchiseName,
       },
+      totalQuantity: product.quantity,
       quantity: data.quantity,
       type: "add",
     });
@@ -110,13 +109,11 @@ export async function updateStock(data) {
     if (product.stock[stockIndex].quantity < data.quantity) {
       throw new HttpException(400, "Insufficient stock");
     }
-    // const quantity = data.quantity;
     const totalQuantity = product.quantity - data.quantity;
     product.totalPrice = product.price * totalQuantity;
 
     product.stock[stockIndex].quantity -= data.quantity;
     product.quantity -= data.quantity;
-    // franchiseData.stock[franchiseIndex].product.quantity -= data.quantity;
   } else {
     throw new HttpException(404, "Stock not found in specified store");
   }
@@ -137,24 +134,27 @@ export async function updateStock(data) {
     franchiseData.stock[franchiseIndex].product.quantity -= data.quantity;
   }
   const updatedFranchise = await franchiseData.save();
+
     const productDetails = {
       productId: product._id,
       productName: product.name,
       productCode: product.productCode,
+      categoryName: product.category.categoryName,
       price: product.price,
     };
 
   const stock = new stockModel({
     product: productDetails,
     franchise: franchiseDetails,
-    quantity:data.quantity,
+    totalQuantity: product.quantity,
+    quantity: data.quantity,
     type: "remove",
   });
   await stock.save();
   return { stock };
 }
 
-// get all stock transactions
+//---------- get all stock transactions --------------
 
 export async function getAllStock(page, limit, query) {
   let queryData = {};

@@ -10,6 +10,8 @@ const productSchema = new Schema(
     },
     productCode: {
       type: String,
+      required:true,
+      unique: true,
     },
     description: {
       type: String,
@@ -32,15 +34,6 @@ const productSchema = new Schema(
         type: String,
       },
     },
-    // franchise: {
-    //   franchiseId: {
-    //     type: String,
-    //     ref: "Category",
-    //   },
-    //   franchiseName: {
-    //     type: String,
-    //   },
-    // },
     stock: [
       {
         storeId: {

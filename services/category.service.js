@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import categoryModel from "../models/categoryModel.js";
+import productModel from "../models/productModel.js";
 import { HttpException } from "../exceptions/exceptions.js";
 
 //--------- add new category ----------
@@ -25,14 +26,16 @@ export async function updCategory(categoryData, categoryId) {
     throw new HttpException(400, "Invalid category ID");
   }
 
-    if (categoryData.categoryName) {
-      const findCategory = await categoryModel.findOne({
-        categoryName: categoryData.categoryName,
-      });
-      if (findCategory && findCategory._id.toString() !== categoryId) {
-        throw new HttpException(400, "Product with this name already exists");
-      }
+  if (categoryData.categoryName) {
+    const findCategory = await categoryModel.findOne({
+      categoryName: {
+        $regex: new RegExp("^" + categoryData.categoryName + "$", "i"),
+      },
+    });
+    if (findCategory && findCategory._id.toString() !== categoryId) {
+      throw new HttpException(400, "Product with this name already exists");
     }
+  }
 
   const category = await categoryModel.findByIdAndUpdate(
     categoryId,
@@ -41,6 +44,18 @@ export async function updCategory(categoryData, categoryId) {
   );
   if (!category) {
     throw new HttpException(404, "Category not found");
+  }
+
+  // Update the products that belong to this category
+  const products = await productModel.find({
+    "category.categoryId": categoryId,
+  });
+
+  for (const product of products) {
+    if (categoryData.categoryName) {
+      product.category.categoryName = categoryData.categoryName;
+    }
+    await product.save();
   }
 
   return { category };
