@@ -180,7 +180,19 @@ export async function deleteProduct(productId) {
     throw new HttpException(400, "Invalid product ID");
   }
  
-  const product = await productModel.findByIdAndDelete(productId);
-  if (!product) throw new HttpException(404, "product not found");
+  const product = await productModel.findById(productId);
+  if (!product) throw new HttpException(404, "Product not found");
+
+  const categoryId = product.category.categoryId;
+  const category = await categoryModel.findById(categoryId);
+  if (!category) throw new HttpException(404, "Category not found");
+
+  // Remove the product ID from the category's products array
+  category.products = category.products.filter(
+    (id) => id.toString() !== productId
+  );
+  await category.save();
+
+  await productModel.findByIdAndDelete(productId);
   return { product };
 }
