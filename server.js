@@ -41,7 +41,7 @@ app.use(
 
 app.use(errorHandling);
 
-const port = process.env.PORT || 5000;
+const port = 8080 || 5000;
 app.listen(port, () => {
   console.log(`App listening on the port ${ip.address()}:${port}`);
 });

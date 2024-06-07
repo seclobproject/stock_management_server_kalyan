@@ -14,7 +14,7 @@ export const authorizeRoles = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+    const decoded = jwt.verify(token, 'stock_management');
     const user = await userModel.findOne({ _id: decoded._id });
 
     if (!user) {
