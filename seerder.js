@@ -1,10 +1,21 @@
 import { initialize } from "./config/dbConnection.js";
 import admin from "./data/admin.data.js";
 import User from "./models/userModel.js";
+import Franchise from "./models/franchiseModel.js";
+import Category from "./models/categoryModel.js";
+import Product from "./models/productModel.js";
+import Stock from "./models/stockModel.js";
+
 await initialize();
+
 const importData = async () => {
   try {
     await User.deleteMany();
+    await Franchise.deleteMany();
+    await Category.deleteMany();
+    await Product.deleteMany();
+    await Stock.deleteMany();
+
     const createdAdmin = await User.insertMany(admin);
     console.log("Data cleared and Imported");
     process.exit();

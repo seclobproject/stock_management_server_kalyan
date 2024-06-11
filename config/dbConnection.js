@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import "dotenv/config";
 
-const connection_string = "mongodb://127.0.0.1/product_manage_seclob";
+const connection_string = "mongodb://127.0.0.1/stock_manage_kalyan";
 
 export async function initialize() {
   try {
